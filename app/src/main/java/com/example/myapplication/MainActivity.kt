@@ -86,6 +86,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
         CallFriendButton(
             phoneNumber = { editText.text.toString() }
         )
+
+        ShareTextButton(
+            text = { editText.text.toString() }
+        )
     }
 }
 
@@ -114,5 +118,23 @@ fun CallFriendButton(phoneNumber: () -> String) {
         modifier = Modifier.padding(top = 16.dp)
     ) {
         Text("Позвонить другу")
+    }
+}
+
+@Composable
+fun ShareTextButton(text: () -> String) {
+    val context = LocalContext.current
+
+    Button(
+        onClick = {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, text())
+            }
+            context.startActivity(Intent.createChooser(intent, "Поделиться через..."))
+        },
+        modifier = Modifier.padding(top = 16.dp)
+    ) {
+        Text("Поделиться текстом")
     }
 }
