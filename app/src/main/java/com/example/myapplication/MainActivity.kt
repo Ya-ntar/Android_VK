@@ -39,13 +39,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                   AppList(
-                       modifier = Modifier.padding(innerPadding),
-                       apps = current_apps_list,
-                       onDownloadClick = { }
-                   )
-                }
+                AppListScreen()
             }
         }
     }
