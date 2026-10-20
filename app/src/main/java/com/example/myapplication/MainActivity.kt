@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.AppDimens
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
@@ -39,7 +43,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                AppListScreen()
+                AppListScreen(current_apps_list)
             }
         }
     }
@@ -62,22 +66,52 @@ val current_apps_list = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppListScreen(apps: List<AppItem> = current_apps_list) {
+
+fun AppListScreen(apps: List<AppItem>) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Приложения") })
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { /* ... */ }) {
-                Text("+")
-            }
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Приложения",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 12.dp, end = 4.dp)
+                            .size(AppDimens.ToolbarIconSize)
+                            .clip(RoundedCornerShape(AppDimens.IconCornerRadius))
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.download_btn),
+                            contentDescription = "Текущее приложение",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
         }
     ) { innerPadding ->
-        AppList(
-            apps = apps,
-            onDownloadClick = { /* ... */ },
-            modifier = Modifier.padding(innerPadding)
-        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            items(apps, key = { it.id }) { app ->
+                AppItemView(
+                    x0 = app,
+                    onDownloadClick = { /* пока пусто */ }
+                )
+            }
+        }
     }
 }
 @Composable

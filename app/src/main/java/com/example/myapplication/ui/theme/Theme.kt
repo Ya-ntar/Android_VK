@@ -60,7 +60,8 @@ fun MyApplicationTheme(
 
 object AppDimens {
     val IconSize = 56.dp
-    val IconCornerRadius = 14.dp
+    val ToolbarIconSize = 36.dp
+    val IconCornerRadius = 10.dp
     val ItemPadding = 12.dp
     val ItemSpacing = 12.dp
 }
