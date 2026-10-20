@@ -10,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -55,4 +56,11 @@ fun MyApplicationTheme(
         typography = Typography,
         content = content
     )
+}
+
+object AppDimens {
+    val IconSize = 56.dp
+    val IconCornerRadius = 14.dp
+    val ItemPadding = 12.dp
+    val ItemSpacing = 12.dp
 }

@@ -5,20 +5,32 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.myapplication.ui.theme.AppDimens
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -79,27 +91,68 @@ fun AppList(modifier: Modifier = Modifier, apps: List<AppItem>, onDownloadClick:
 
     Column(modifier = modifier) {
         for (app in apps) {
-            AppItemView(app)
+            AppItemView(
+                app,
+                onDownloadClick = onDownloadClick,
+                modifier = Modifier
+            )
         }
     }
 }
 
 @Composable
-fun AppItemView(x0: AppItem) {
-    Row() {
-        Image(
-            painter = painterResource(id = x0.iconResId),
-            contentDescription = x0.name,
-
-        )
-        Column() {
-            Text(text = x0.name)
-            Text(text = "${x0.downloads} downloads")
+fun AppItemView(
+    x0: AppItem,
+    onDownloadClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(AppDimens.ItemPadding),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(AppDimens.IconSize)
+                .clip(RoundedCornerShape(AppDimens.IconCornerRadius))
+        ) {
+            Image(
+                painter = painterResource(id = x0.iconResId),
+                contentDescription = x0.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
+
+        Spacer(Modifier.width(AppDimens.ItemSpacing))
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = x0.name,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = "${x0.downloads} downloads",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Spacer(Modifier.width(AppDimens.ItemSpacing))
+
         if (x0.isDownloaded) {
-            Text(text = "Downloaded")
+            Text(
+                text = "Downloaded",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
         } else {
-            Text(text = "Not downloaded")
+            Button(onClick = onDownloadClick) {
+                Text("Download")
+            }
         }
     }
 }
