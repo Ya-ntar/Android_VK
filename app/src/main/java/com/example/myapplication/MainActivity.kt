@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -100,24 +102,20 @@ fun AppListScreen(apps: List<AppItem>) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            items(apps, key = { it.id }) { app ->
-                AppItemView(
-                    x0 = app,
-                    onDownloadClick = { /* пока пусто */ }
-                )
-            }
-        }
+        AppList(
+            modifier = Modifier.padding(innerPadding),
+            apps = apps,
+            onDownloadClick = { /* Handle download click */ }
+        )
     }
 }
 @Composable
 fun AppList(modifier: Modifier = Modifier, apps: List<AppItem>, onDownloadClick: () -> Unit) {
-
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         for (app in apps) {
             AppItemView(
                 app,
